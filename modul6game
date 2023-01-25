@@ -1,0 +1,217 @@
+from tkinter import *
+from tkinter import messagebox as mb
+import threading
+import random
+import os.path
+from tkinter import *
+
+datUser = 'raa'
+datPassword = 'halohai'
+
+class DemoLogin:
+    def __init__(self, induk, judul):
+        self.induk = induk
+
+        self.induk.title(judul)
+        self.induk.protocol("WM_DELETE_WINDOW", self.Tutup)
+        self.induk.resizable(False, False)
+
+        self.aturKomponen()
+
+        self.entUser.focus_set()
+
+    def aturKomponen(self):
+        frameUtama = Frame(self.induk, bd=10)
+        frameUtama.pack(fill=BOTH, expand=YES)
+
+        frData = Frame(frameUtama, bd=5)
+        frData.pack(fill=BOTH, expand=YES)
+
+        Label(frData, text='Nama Pengguna:').grid(row=0, column=0, sticky=W)
+        self.entUser = Entry(frData)
+        self.entUser.grid(row=0, column=1)
+
+        Label(frData, text='Kata Kunci:').grid(row=1, column=0, sticky=W)
+        self.entPass = Entry(frData, show='*')
+ 
+        self.entPass.grid(row=1, column=1)
+        self.cek = IntVar()
+
+        self.cbShowPass = Checkbutton(frData, text='Lihat Kata Kunci',
+ variable=self.cek, command=self.lihatPassword)
+        self.cbShowPass.grid(row=2, column=1, sticky=E)
+
+        frTombol = Frame(frameUtama, bd=5)
+        frTombol.pack(fill=BOTH, expand=YES)
+
+        self.btnLogin = Button(frTombol, text='Login', command=self.prosesLogin)
+        self.btnLogin.pack(side=LEFT, fill=BOTH, expand=YES)
+
+        self.btnBatal = Button(frTombol, text='Batal', command=self.Tutup)
+        self.btnBatal.pack(side=LEFT, fill=BOTH, expand=YES)
+
+    def prosesLogin(self, event=None):
+     nmUser = self.entUser.get()
+     passUser = self.entPass.get()
+
+     if nmUser=='':
+        mb.showwarning('Pesan Salah', 'Nama User tidak boleh kosong!', parent = self.induk)
+        self.entUser.focus_set()
+    
+     elif passUser=='':
+        mb.showwarning('Pesan Salah', 'Kata Kunci tidak boleh kosong!',
+parent=self.induk)
+        self.entPass.focus_set()
+     
+     elif (nmUser==datUser) and (passUser==datPassword):
+        mb.showinfo("Login", "Selamat Bermain", parent=self.induk) 
+        self.Tutup()
+     else:
+        mb.showwarning('Pesan Salah', 'Nama Pengguna atau Kata Kunci SALAH!!', parent=self.induk)
+        self.Hapus()
+
+    def lihatPassword(self, event=None):
+        nilaiCek = self.cek.get()
+
+        if nilaiCek== 1:
+         self.entPass['show'] = ''
+         
+        else:
+            self.entPass['show'] = '*'
+
+    def Tutup(self, event=None):
+     self.induk.destroy()
+
+    def Hapus(self, event=None):
+     self.entUser.delete(0, END)
+     self.entPass.delete(0, END)
+     self.entUser.focus_set()
+
+if __name__ == '__main__':
+ root= Tk()
+
+ app = DemoLogin(root, ":: Demo Login Password ::")
+
+ root.mainloop()
+
+ import turtle as t
+playerAscore=0
+playerBscore=0
+ 
+#create a window and declare a variable called window and call the screen()
+window=t.Screen()
+window.title("The Pong Game")
+window.bgcolor("green")
+window.setup(width=800,height=600)
+window.tracer(0)
+ 
+#Creating the left paddle
+leftpaddle=t.Turtle()
+leftpaddle.speed(0)
+leftpaddle.shape("square")
+leftpaddle.color("white")
+leftpaddle.shapesize(stretch_wid=5,stretch_len=1)
+leftpaddle.penup()
+leftpaddle.goto(-350,0)
+ 
+#Creating the right paddle
+rightpaddle=t.Turtle()
+rightpaddle.speed(0)
+rightpaddle.shape("square")
+rightpaddle.color("white")
+rightpaddle.shapesize(stretch_wid=5,stretch_len=1)
+rightpaddle.penup()
+rightpaddle.goto(-350,0)
+ 
+#Code for creating the ball
+ball=t.Turtle()
+ball.speed(0)
+ball.shape("circle")
+ball.color("red")
+ball.penup()
+ball.goto(5,5)
+ballxdirection=0.2
+ballydirection=0.2
+ 
+#Code for creating pen for scorecard update
+pen=t.Turtle()
+pen.speed(0)
+pen.color("Blue")
+pen.penup()
+pen.hideturtle()
+pen.goto(0,260)
+pen.write("score",align="center",font=('Arial',24,'normal'))
+ 
+#code for moving the leftpaddle
+def leftpaddleup():
+    y=leftpaddle.ycor()
+    y=y+90
+    leftpaddle.sety(y)
+ 
+def leftpaddledown():
+    y=leftpaddle.ycor()
+    y=y+90
+    leftpaddle.sety(y)
+ 
+#code for moving the rightpaddle
+def rightpaddleup():
+    y=rightpaddle.ycor()
+    y=y+90
+    rightpaddle.sety(y)
+ 
+def rightpaddledown():
+    y=rightpaddle.ycor()
+    y=y+90
+    rightpaddle.sety(y)
+ 
+#Assign keys to play
+window.listen()
+window.onkeypress(leftpaddleup,'w')
+window.onkeypress(leftpaddledown,'s')
+window.onkeypress(rightpaddleup,'Up')
+window.onkeypress(rightpaddledown,'Down')
+ 
+while True:
+    window.update()
+ 
+    #moving the ball
+    ball.setx(ball.xcor()+ballxdirection)
+    ball.sety(ball.ycor()+ballxdirection)
+ 
+    #border set up
+    if ball.ycor()>290:
+        ball.sety(290)
+        ballydirection=ballydirection*-1
+    if ball.ycor()<-290:
+        ball.sety(-290)
+        ballydirection=ballydirection*-1
+         
+    if ball.xcor() > 390:
+        ball.goto(0,0)
+        ball_dx = ball_dx * -1
+        player_a_score = player_a_score + 1
+        pen.clear()
+        pen.write("Player A: {}                    Player B: {} ".format(player_a_score,player_b_score),align="center",font=('Monaco',24,"normal"))
+        os.system("afplay wallhit.wav&")
+ 
+ 
+ 
+    if(ball.xcor()) < -390: # Left width paddle Border
+        ball.goto(0,0)
+        ball_dx = ball_dx * -1
+        player_b_score = player_b_score + 1
+        pen.clear()
+        pen.write("Player A: {}                    Player B: {} ".format(player_a_score,player_b_score),align="center",font=('Monaco',24,"normal"))
+        os.system("afplay wallhit.wav&")
+ 
+     # Handling the collisions with paddles.
+ 
+    if(ball.xcor() > 340) and (ball.xcor() < 350) and (ball.ycor() < rightpaddle.ycor() + 40 and ball.ycor() > rightpaddle.ycor() - 40):
+        ball.setx(340)
+        ball_dx = ball_dx * -1
+        os.system("afplay paddle.wav&")
+ 
+    if(ball.xcor() < -340) and (ball.xcor() > -350) and (ball.ycor() < leftpaddle.ycor() + 40 and ball.ycor() > leftpaddle.ycor() - 40):
+        ball.setx(-340)
+        ball_dx = ball_dx * -1
+        os.system("afplay paddle.wav&")
